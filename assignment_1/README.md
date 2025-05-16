@@ -1,4 +1,23 @@
-# exercise 1: intro to c `[22 + 6]`
+# exercise 1: intro to c `[24 + 3 / 15]`
+
+# running programs
+
+a makefile is provided. run `make run p=[part number]` to build and run individual parts. you are expected to verify your own test cases for this exercise.
+
+# exercises
+
+## conventions `[2]`
+
+some points will be considered based on adherence to convention. while a small part of the overall grade, these are helpful to know.
+
+ - all function and variable names must be in snake case. this means rather than `DoSomething` or `doSomething`, they should be called `do_something`.
+ - function and variable names should be descriptive. `i`/`j`/`k`, `buf`, and `tmp`/`temp` are common shorthands for index, buffers, and temporary variables, but other intentions should be explicitly declared through the name.
+ - pointer stars should be declared next to the variable name, not the type
+ - brackets start on the same line as their context. there are 3 major ways of styling brackets, but this is the most common in c programming.
+ - a line should not exceed 78 characters. use backslashes to separate tokens that must go on the same line, if necessary.
+ - one statement per line.
+
+these are not hard rules and will be enforced fairly loosely, but consistently bad formatting will result in docking of points.
 
 ## part 1: simple loops and strings `[4 + 1]`
 
@@ -76,7 +95,7 @@ buzz: b
 10 b
 ```
 
-## part 4: simple pointers and dynamic memory allocation on the heap `[7 + 3]`
+## part 4: simple pointers and dynamic memory allocation on the heap `[8]`
 
 as mentioned previously, strings are just arrays of characters, and in the same vein, arrays are just references to blocks of memory. this introduces several problems in c; there is no inherent length attribute associated with arrays, and you can't pass all of the data in an array as an argument to a function.
 
@@ -110,13 +129,26 @@ printf("\n");
 free(arr);                                  // return arr's memory allocation to the heap
 ```
 
-up until now you have likely been using mostly stack memory with memory allocations hidden from you, but for more dynamic tasks these functions will be required. this assignment will effectively force you to use dynamic memory. the provided template contains an empty main function with a single helper function that verifies numeric ordering of an array. your task is to create a program that generates a random 10000000 (10 million) integer array and sort it in ascending order. you may choose to use any sorting algorithm you wish. it must conform to the following specification:
+up until now you have likely been using mostly stack memory with memory allocations hidden from you, but for more dynamic tasks these functions will be required. this assignment will effectively force you to use dynamic memory. the provided template contains a mostly main function with a single helper function that verifies numeric ordering of an array. your task is to create a program that generates a random 10000000 (10 million) integer array and sort it in ascending order. you may choose to use any sorting algorithm you wish, but don't bother with a complex one. it must conform to the following specification:
 
  - complete the `generate_array` function, which generates a randomized array of positive integers of the specified length. `[3]`
- - complete the `sort_array` function, which must sort the array in ascending order. `[3]`
+ - complete the `sort_array` function, which must sort the array in ascending order. a point is lost by default for using a selection-based sort. `[4]`
  - any heap memory used must be freed. you can use [valgrind <img src="resources/link.png" width="12" height="12">](https://valgrind.org/) to find memory leaks. `[1]`
- - extra credit: implement any sort that necessarily use additional heap memory beyond the original array. an example would be heap sort. points assigned based on complexity. `[3]`
 
-## running programs
+## challenge 1: heapsort `[6]`
 
-a makefile is provided. run `make run p=[part number]` to build and run individual parts. you are expected to verify your own test cases for this exercise.
+heapsort is a sorting algorithm that utilizes a trick with how data is organized to achieve faster sort times (on average) than insertion or selection sorts. heapsort follows the following procedure:
+
+1. create a heap out of the input array, and keep track of its `size`. this is an implicit data structure where, assuming 0-indexing, a value at index `i` is always greater than its child values at indices `2i + 1` and `2i + 2`, meaning the first element is always the largest element in the array.
+2. swap the first and last elements of the array, and decrease the considered `size` of the heap by 1.
+3. sift the new first element of the array down, swapping with the larger of its two children until it is greater than both of its child values.
+4. repeat from step 2 until `size` is 1.
+
+the big-O [time complexity <img src="resources/link.png" width="12" height="12">](https://en.wikipedia.org/wiki/Time_complexity) of heapsort is O(n log n). time complexity describes the amount of time an algorithm would be expected to take. it counts the number of "basic" or elementary operations which are assumed to take a fixed amount of time, and extrapolates it to an input of a particular size, usually `n`. it is effectively expected time as a function of input size, although time complexity is not the end-all be-all of performance.
+
+the provided template is nearly identical to the one in p4, with the exceptions of the `sift_down` and `heapify` functions that you must implement. you may copy your `generate_array` over from p4. it must conform to the follow specification:
+
+ - the `heapify` function must convert the input array into a heap, where any value with index `i` is always greater than its child values at indices `2i + 1` and `2i + 2`. this must run in `O(n)` time. `[2]`
+ - the `sift_down` function must take the current first element of the heap, and move it down the heap until the heap property is satisfied again. because the *depth* of a heap is bounded logarithmically, this must run in `O(n log n)` time. `[2]`
+ - the output array must be sorted. `[1]`
+ - any heap memory used must be freed. `[1]`

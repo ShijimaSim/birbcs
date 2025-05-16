@@ -22,6 +22,12 @@ int *generate_array(int len) {
     return NULL;
 }
 
+void heapify(int *arr, int len) {
+}
+
+void sift_down(int *arr, int len) {
+}
+
 void sort_array(int *arr, int len) {
 }
 
@@ -38,3 +44,5 @@ int check_sorted(int *arr, int len) {
     }
     return 1;
 }
+
+
